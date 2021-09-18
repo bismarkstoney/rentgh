@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load humanize %}
+{% load widget_tweaks %}
+{% block title %} Property Listings{% endblock title %}
+
+{% block content %}
+
+  
+
+  <section id="showcase"  style="background-image: url({% static 'img/showcase.jpg' %});">
+    <div class="container text-center">
+      <div class="home-search p-5">
+        <div class="overlay p-5">
+          <h1 class="display-4 mb-4">
+          Browse Our Properties
+          </h1>
+          <p class="lead">Get the lastest listings from our landloads and pay less for your dream home</p>
+          <div class="search">
+
+
+
+
+
+ <form method="get">
+    <div class="well">
+      
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.username.label_tag }}
+          {% render_field filters.form.price class="form-control" placeholder="Price" min=0 %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.first_name.label_tag }}
+          {% render_field filters.form.bedrooms class="form-control" placeholder="Bedrooms" min=0 %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.last_name.label_tag }}
+          {% render_field filters.form.bathromms class="form-control" placeholder="Bathrooms" min=0  %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.year_joined.label_tag }}
+          {% render_field filters.form.address class="form-control" placeholder="Dansoman/Atonsu..." %}
+        </div>
+        
+      </div>
+      <button class="btn btn-info btn-block mt-4" type="submit">Search</button>
+    </div>
+  </form>
+
+
+
+          
+      
+        
+           
+             
+              
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <section id="bc" class="mt-3">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url 'index' %}">
+              <i class="fas fa-home"></i> Home</a>
+          </li>
+          <li class="breadcrumb-item active"> Browse Listings</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Listings -->
+  <section id="listings" class="py-4">
+    <div class="container">
+ 
+      <div class="row">
+   {% if listings %}
+   {% for listing in  filters.qs %}
+   <!-- Listing 1 -->
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card listing-preview">
+            <img class="card-img-top" src="{{ listing.photo_main.url}}" height="300" width="600" alt="">
+            <div class="card-img-overlay">
+              <h2>
+                <span class="badge badge-info text-white">GH₵{{listing.price| intcomma}}</span>
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="listing-heading text-center">
+                <h4 class="text-primary">{{listing.title}}</h4>
+                <p>
+                  <i class="fas fa-map-marker text-info"></i> {{listing.address}}</p>
+              </div>
+              <hr>
+              <div class="row py-2 text-info">
+                <div class="col-6">
+                  <i class="fas fa-th-large"></i> Self Metter: {{listing.get_selfmeter_display}}</div>
+                <div class="col-6">
+                  <i class="fas fa-home"></i> Property Type : {{listing.get_propertytype_display}}</div>
+              </div>
+              <div class="row py-2 text-info">
+                <div class="col-6">
+                  <i class="fas fa-user"></i> Owner: {{listing.get_lanlord_display}}</div>
+                <div class="col-6">
+                  <i class="fas fa-car"></i> Garage: {{listing.garage}}</div>
+              </div>
+              <div class="row py-2 text-info">
+                <div class="col-6">
+                  <i class="fas fa-bed"></i> Bedrooms: {{listing.bedrooms}}</div>
+                <div class="col-6">
+                  <i class="fas fa-bath"></i> Bathrooms: {{listing.bathromms}}</div>
+              </div>
+              <hr>
+              <div class="row py-2 text-info">
+                <div class="col-12">
+                  <i class="fas fa-user"></i> {{listing.realtor.name}}</div>
+              </div>
+              <div class="row text-info pb-2">
+                <div class="col-6">
+                  <i class="fas fa-clock"></i> {{listing.list_date |timesince}}</div>
+              </div>
+              <hr>
+              <a href="{{ listing.get_absolute_url }} " class="btn btn-primary btn-block">More Info</a>
+            </div>
+          </div>
+        </div>
+   
+   {% endfor %}
+   
+   {% else %}
+   <div class="col-lg-12">
+   <h1>No Listings</h1>
+   </div>
+   
+   {% endif %}
+        
+
+       
+        
+
+       
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+        {% if is_paginated %}
+  <nav aria-label="Page navigation conatiner"></nav>
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT &raquo;</a></li>
+
+    {% endif %}
+  </ul>
+  </nav>
+</div>
+{% endif %}
+          
+      </div>
+    </div>
+  </section>
+
+
+ 
+
+ 
+{% endblock content %}
+
+
